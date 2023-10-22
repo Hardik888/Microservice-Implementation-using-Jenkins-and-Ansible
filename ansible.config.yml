@@ -1,0 +1,26 @@
+---
+- name: connect docker
+  hosts: ansible_client
+  remote_user: root
+  become: true
+  tasks:
+    - name: Clone The Repository
+      git:
+        repo: "<YOUR REPO URL>"
+        dest: src/
+        update: yes
+
+    - name: Install the dependencies
+      command: npm install
+      args:
+        chdir: src/
+
+    - name: Create a PM2 Server
+      command: npm install pm2 -g
+      args:
+        chdir: src/
+
+    - name: Run the PM2 Server
+      command: pm2 --name microservice start npm -- start
+      args:
+        chdir: src/
